@@ -237,8 +237,8 @@ export const PROJECTS: Project[] = [
       { label: 'Vite HMR', value: '< 150ms' },
       { label: 'Lighthouse', value: '99 / 100' }
     ],
-    githubUrl: 'https://github.com/Harsh927995',
-    liveUrl: 'https://github.com/Harsh927995',
+    githubUrl: 'https://github.com/Harsh927995/portfolio',
+    liveUrl: 'https://github.com/Harsh927995/portfolio',
     featured: true
   }
 ];

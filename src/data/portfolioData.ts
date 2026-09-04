@@ -169,7 +169,7 @@ export const SERVICES_DATA: ServiceItem[] = [
   },
   {
     id: 'academic',
-    title: 'AI Primitives & Python Tools',
+    title: 'Knowledge of AI',
     desc: 'Foundational development with Generative AI architectures, prompt engineering, NLP concepts, and Python data libraries (NumPy, Pandas, Streamlit).',
     iconName: 'cpu',
     color: '#00dbe7'

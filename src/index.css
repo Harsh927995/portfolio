@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background-color: #121414;
+  color: #e2e2e2;
+  margin: 0;
+  padding: 0;
+}
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Montserrat', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --color-surface: #121414;
+  --color-surface-dim: #121414;
+  --color-surface-lowest: #0c0f0f;
+  --color-surface-low: #1a1c1c;
+  --color-surface-mid: #1e2020;
+  --color-surface-high: #282a2b;
+  --color-surface-highest: #333535;
+
+  --color-primary-text: #e1fdff;
+  --color-primary-cyan: #00f2ff;
+  --color-primary-dim: #00dbe7;
+  --color-secondary-purple: #ebb2ff;
+  --color-secondary-fixed: #f8d8ff;
+  --color-text-muted: #b9cacb;
+  --color-outline-subtle: #3a494b;
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Montserrat', sans-serif;
+  }
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .font-sans {
+    font-family: 'Inter', sans-serif;
+  }
+
+  .neon-glow {
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+  }
+  
+  .neon-glow-purple {
+    box-shadow: 0 0 20px rgba(235, 178, 255, 0.35);
+  }
+
+  .neon-text-glow {
+    text-shadow: 0 0 10px rgba(0, 219, 231, 0.5);
+  }
+
+  .surface-glass {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  
+  .surface-glass-active {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(0, 242, 255, 0.3);
+  }
+
+  .clickable {
+    cursor: pointer;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0c0f0f;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #00f2ff;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #74f5ff;
+}
+
+/* IDE Window Controls */
+.mac-controls {
+  display: flex;
+  gap: 6px;
+}
+.mac-controls span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.mac-close { background-color: #ff5f56; }
+.mac-min { background-color: #ffbd2e; }
+.mac-max { background-color: #27c93f; }

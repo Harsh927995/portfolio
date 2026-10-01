@@ -130,7 +130,7 @@ dev_core---cyber-premium-developer-portfolio/
 Chaibasa Engineering College (Jharkhand University of Technology, Ranchi)
 
 - 🌐 **GitHub**: [@Harsh927995](https://github.com/Harsh927995)
-- 💼 **LinkedIn**: [Harsh Kashyap](https://www.linkedin.com/in/harsh-kashyap)
+- 💼 **LinkedIn**: [Harsh Kashyap](https://www.linkedin.com/in/harsh-kashyap-)
 - 📧 **Email**: [harshjha9279@gmail.com](mailto:harshjha9279@gmail.com)
 - 📱 **Direct Line**: `+91 9279584866`
 

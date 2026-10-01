@@ -108,7 +108,7 @@ def create_resume(output_path):
         "+91 9279584866 &nbsp;|&nbsp; "
         "harshjha9279@gmail.com &nbsp;|&nbsp; "
         "<a href='https://github.com/Harsh927995' color='#0284c7'>github.com/Harsh927995</a> &nbsp;|&nbsp; "
-        "<a href='https://www.linkedin.com/' color='#0284c7'>linkedin.com/in/harsh-kashyap</a>"
+        "<a href='https://www.linkedin.com/in/harsh-kashyap-' color='#0284c7'>linkedin.com/in/harsh-kashyap-</a>"
     )
     story.append(Paragraph(contacts_text, contact_style))
     story.append(Spacer(1, 6))

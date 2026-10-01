@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { X, Phone, Mail, Download } from 'lucide-react';
+import { X, Phone, Mail, Download, Linkedin } from 'lucide-react';
 import { DEVELOPER_PROFILE } from '../data/portfolioData';
 
 interface ContactCardModalProps {
@@ -86,6 +86,16 @@ export const ContactCardModal: React.FC<ContactCardModalProps> = ({ isOpen, onCl
             >
               <Mail className="w-4 h-4 text-[#00f2ff]" />
               <span>{DEVELOPER_PROFILE.email}</span>
+            </a>
+
+            <a
+              href={DEVELOPER_PROFILE.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/15 text-[#e1fdff] hover:text-[#00f2ff] font-mono text-xs sm:text-sm flex items-center gap-1.5 transition-all cursor-pointer"
+            >
+              <Linkedin className="w-4 h-4 text-[#00dbe7]" />
+              <span>LinkedIn</span>
             </a>
           </div>
 

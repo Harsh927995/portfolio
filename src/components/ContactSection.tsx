@@ -222,19 +222,38 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenContactCar
           </div>
 
           {/* Social Profiles Card */}
-          <div className="surface-glass p-6 rounded-xl border border-white/10 flex items-center justify-between">
-            <div className="text-xs font-mono text-[#b9cacb]">
-              GITHUB_PROFILE: <strong>{DEVELOPER_PROFILE.handle}</strong>
+          <div className="surface-glass p-6 rounded-xl border border-white/10 flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <div className="text-xs font-mono text-[#b9cacb]">
+                GITHUB: <strong className="text-[#e1fdff]">{DEVELOPER_PROFILE.handle}</strong>
+              </div>
+              <a
+                href={DEVELOPER_PROFILE.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-white/5 hover:bg-white/10 text-xs font-mono text-[#00f2ff] border border-white/10 hover:border-[#00f2ff]/40 transition-colors"
+              >
+                <Github className="w-3.5 h-3.5" />
+                <span>Inspect</span>
+              </a>
             </div>
-            <a
-              href={DEVELOPER_PROFILE.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-white/5 hover:bg-white/10 text-xs font-mono text-[#00f2ff] border border-white/10 hover:border-[#00f2ff]/40 transition-colors"
-            >
-              <Github className="w-3.5 h-3.5" />
-              <span>Inspect</span>
-            </a>
+
+            <div className="h-[1px] bg-white/5" />
+
+            <div className="flex items-center justify-between">
+              <div className="text-xs font-mono text-[#b9cacb]">
+                LINKEDIN: <strong className="text-[#e1fdff]">harsh-kashyap-</strong>
+              </div>
+              <a
+                href={DEVELOPER_PROFILE.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-white/5 hover:bg-white/10 text-xs font-mono text-[#00f2ff] border border-white/10 hover:border-[#00f2ff]/40 transition-colors"
+              >
+                <Linkedin className="w-3.5 h-3.5 text-[#00dbe7]" />
+                <span>Connect</span>
+              </a>
+            </div>
           </div>
         </div>
 

@@ -32,7 +32,7 @@ export const DEVELOPER_PROFILE = {
   subtitle: "Building the Future of the Web",
   phone: "9279584866",
   email: "harshjha9279@gmail.com",
-  linkedin: "https://www.linkedin.com/",
+  linkedin: "https://www.linkedin.com/in/harsh-kashyap-",
   github: "https://github.com/Harsh927995",
   twitter: "https://twitter.com",
   location: "India (Remote / Global)",

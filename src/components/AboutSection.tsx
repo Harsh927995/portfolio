@@ -155,6 +155,18 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenResume }) => {
                 <span className="text-[#b9cacb]/60 uppercase">GitHub</span>
                 <span className="text-[#ebb2ff]">@Harsh927995</span>
               </div>
+
+              <div className="flex justify-between items-center py-1 border-b border-white/5">
+                <span className="text-[#b9cacb]/60 uppercase">LinkedIn</span>
+                <a
+                  href={DEVELOPER_PROFILE.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#00f2ff] hover:underline"
+                >
+                  harsh-kashyap-
+                </a>
+              </div>
             </div>
           </div>
 

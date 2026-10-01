@@ -140,7 +140,7 @@ ${CERTIFICATIONS.map((cert) => `- ${cert.title} (${cert.issuer}): ${cert.detail}
 
               <a href={DEVELOPER_PROFILE.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-[#00f2ff] transition-colors">
                 <Linkedin className="w-3.5 h-3.5 text-[#00dbe7]" />
-                <span>LinkedIn</span>
+                <span>linkedin.com/in/harsh-kashyap-</span>
               </a>
 
               <a href={DEVELOPER_PROFILE.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-[#00f2ff] transition-colors">

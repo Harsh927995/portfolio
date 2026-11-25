@@ -7,6 +7,8 @@ interface NavbarProps {
   onNavigate: (sectionId: string) => void;
   onOpenResume: () => void;
   onOpenTerminal: () => void;
+  onOpenLogoPicker: () => void;
+  logoSrc: string;
   theme: ThemeId;
   onChangeTheme: (theme: ThemeId) => void;
 }
@@ -16,6 +18,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onNavigate,
   onOpenResume,
   onOpenTerminal,
+  onOpenLogoPicker,
+  logoSrc,
   theme,
   onChangeTheme,
 }) => {
@@ -77,19 +81,31 @@ export const Navbar: React.FC<NavbarProps> = ({
     >
       <div className="w-full max-w-[1720px] 2xl:max-w-[1840px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-14 h-20 flex justify-between items-center">
         {/* Brand */}
-        <button
-          id="brand-logo-btn"
-          onClick={() => handleItemClick('home')}
-          aria-label="Go to top of portfolio"
-          className="font-display text-2xl sm:text-[28px] font-black text-[#e1fdff] tracking-tight flex items-center gap-3 group transition-all hover:scale-105 active:scale-95 text-left cursor-pointer"
-        >
-          <img
-            src="/portfolio-logo.png"
-            alt="Harsh Kashyap Portfolio Logo"
-            className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl object-cover border border-accent/40 shadow-[0_0_16px_rgb(var(--theme-primary-rgb)/0.3)] group-hover:border-accent group-hover:shadow-[0_0_22px_rgb(var(--theme-primary-rgb)/0.5)] transition-all shrink-0"
-          />
-          <span className="group-hover:text-accent transition-colors">portfolio</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            id="brand-logo-avatar-btn"
+            type="button"
+            onClick={onOpenLogoPicker}
+            aria-label="Choose portfolio logo style"
+            title="Click to switch logo (4 options)"
+            className="rounded-xl p-0.5 border border-accent/40 hover:border-accent shadow-[0_0_16px_rgb(var(--theme-primary-rgb)/0.3)] hover:shadow-[0_0_24px_rgb(var(--theme-primary-rgb)/0.55)] transition-all hover:scale-105 active:scale-95 cursor-pointer shrink-0"
+          >
+            <img
+              src={logoSrc}
+              alt="Harsh Kashyap Portfolio Logo"
+              className="w-10 h-10 sm:w-11 sm:h-11 rounded-[10px] object-cover"
+            />
+          </button>
+
+          <button
+            id="brand-logo-btn"
+            onClick={() => handleItemClick('home')}
+            aria-label="Go to top of portfolio"
+            className="font-display text-2xl sm:text-[28px] font-black text-[#e1fdff] hover:text-accent tracking-tight transition-colors text-left cursor-pointer"
+          >
+            portfolio
+          </button>
+        </div>
 
         {/* Desktop Navigation Links */}
         <div className="hidden md:flex items-center gap-1.5 lg:gap-2.5 xl:gap-3.5">

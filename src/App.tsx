@@ -11,6 +11,7 @@ import { Footer } from './components/Footer';
 import { CyberCursor } from './components/CyberCursor';
 import { Project } from './types';
 import { ThemeId, getStoredTheme, applyTheme } from './data/themes';
+import { LogoId, getStoredLogoId, getLogoById, applyLogoFavicon } from './data/logos';
 
 const ResumeModal = lazy(() =>
   import('./components/ResumeModal').then((m) => ({ default: m.ResumeModal }))
@@ -24,19 +25,30 @@ const ProjectDetailModal = lazy(() =>
 const ContactCardModal = lazy(() =>
   import('./components/ContactCardModal').then((m) => ({ default: m.ContactCardModal }))
 );
+const LogoPickerModal = lazy(() =>
+  import('./components/LogoPickerModal').then((m) => ({ default: m.LogoPickerModal }))
+);
 
 export default function App() {
   const [theme, setTheme] = useState<ThemeId>(() => getStoredTheme());
+  const [logoId, setLogoId] = useState<LogoId>(() => getStoredLogoId());
   const [activeSection, setActiveSection] = useState<string>('home');
   const [selectedTechFilter, setSelectedTechFilter] = useState<string | null>(null);
   const [isResumeOpen, setIsResumeOpen] = useState<boolean>(false);
   const [isTerminalOpen, setIsTerminalOpen] = useState<boolean>(false);
   const [isContactCardOpen, setIsContactCardOpen] = useState<boolean>(false);
+  const [isLogoPickerOpen, setIsLogoPickerOpen] = useState<boolean>(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  const activeLogo = getLogoById(logoId);
 
   useEffect(() => {
     applyTheme(theme);
   }, [theme]);
+
+  useEffect(() => {
+    applyLogoFavicon(activeLogo);
+  }, [activeLogo]);
 
   // Global Keyboard shortcuts: press '~' or 'Ctrl+K' to toggle CLI Terminal
   useEffect(() => {
@@ -58,6 +70,7 @@ export default function App() {
         setIsResumeOpen(false);
         setIsTerminalOpen(false);
         setIsContactCardOpen(false);
+        setIsLogoPickerOpen(false);
         setSelectedProject(null);
       }
     };
@@ -121,6 +134,8 @@ export default function App() {
         onNavigate={handleNavigate}
         onOpenResume={() => setIsResumeOpen(true)}
         onOpenTerminal={() => setIsTerminalOpen(true)}
+        onOpenLogoPicker={() => setIsLogoPickerOpen(true)}
+        logoSrc={activeLogo.src}
         theme={theme}
         onChangeTheme={setTheme}
       />
@@ -162,7 +177,11 @@ export default function App() {
       </main>
 
       {/* Cyber Footer */}
-      <Footer onScrollToTop={() => handleNavigate('home')} />
+      <Footer
+        onScrollToTop={() => handleNavigate('home')}
+        onOpenLogoPicker={() => setIsLogoPickerOpen(true)}
+        logoSrc={activeLogo.src}
+      />
 
       <Suspense fallback={null}>
         {/* Interactive CLI Terminal Modal */}
@@ -200,6 +219,16 @@ export default function App() {
           <ContactCardModal
             isOpen={isContactCardOpen}
             onClose={() => setIsContactCardOpen(false)}
+          />
+        )}
+
+        {/* 4-Option Logo Switcher Modal */}
+        {isLogoPickerOpen && (
+          <LogoPickerModal
+            isOpen={isLogoPickerOpen}
+            onClose={() => setIsLogoPickerOpen(false)}
+            selectedLogoId={logoId}
+            onSelectLogo={setLogoId}
           />
         )}
       </Suspense>

@@ -3,9 +3,15 @@ import { DEVELOPER_PROFILE } from '../data/portfolioData';
 
 interface FooterProps {
   onScrollToTop: () => void;
+  onOpenLogoPicker: () => void;
+  logoSrc: string;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onScrollToTop }) => {
+export const Footer: React.FC<FooterProps> = ({
+  onScrollToTop,
+  onOpenLogoPicker,
+  logoSrc,
+}) => {
   return (
     <footer
       id="main-footer"
@@ -13,17 +19,27 @@ export const Footer: React.FC<FooterProps> = ({ onScrollToTop }) => {
     >
       <div className="w-full max-w-[1720px] 2xl:max-w-[1840px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-14 flex flex-col md:flex-row justify-between items-center gap-6">
         {/* Brand */}
-        <button
-          onClick={onScrollToTop}
-          className="font-display text-2xl font-bold text-[#e1fdff] opacity-90 hover:opacity-100 transition-opacity text-left cursor-pointer flex items-center gap-3 group"
-        >
-          <img
-            src="/portfolio-logo.png"
-            alt="Harsh Kashyap Portfolio Logo"
-            className="w-9 h-9 rounded-lg object-cover border border-accent/40 shadow-[0_0_12px_rgb(var(--theme-primary-rgb)/0.25)] group-hover:border-accent transition-all shrink-0"
-          />
-          <span className="group-hover:text-accent transition-colors">portfolio</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={onOpenLogoPicker}
+            aria-label="Choose portfolio logo style"
+            title="Click to switch logo (4 options)"
+            className="rounded-lg p-0.5 border border-accent/40 hover:border-accent shadow-[0_0_12px_rgb(var(--theme-primary-rgb)/0.25)] transition-all hover:scale-105 cursor-pointer shrink-0"
+          >
+            <img
+              src={logoSrc}
+              alt="Harsh Kashyap Portfolio Logo"
+              className="w-9 h-9 rounded-md object-cover"
+            />
+          </button>
+          <button
+            onClick={onScrollToTop}
+            className="font-display text-2xl font-bold text-[#e1fdff] hover:text-accent opacity-90 hover:opacity-100 transition-all text-left cursor-pointer"
+          >
+            portfolio
+          </button>
+        </div>
 
         {/* Links */}
         <div className="flex items-center gap-8">

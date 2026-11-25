@@ -21,10 +21,9 @@ export const SystemDiagnosticsSection: React.FC<SystemDiagnosticsProps> = ({
       {/* Section Header */}
       <h2
         id="diagnostics-heading"
-        className="font-display text-2xl sm:text-3xl font-bold text-[#e1fdff] mb-12 flex items-center gap-4"
+        className="font-display text-2xl sm:text-3xl font-bold text-[#e1fdff] mb-12"
       >
-        <span className="w-12 h-1 bg-accent shadow-[0_0_12px_var(--theme-primary)] inline-block rounded-full"></span>
-        <span>System Diagnostics</span>
+        System Diagnostics
       </h2>
 
       {/* Main Staggered Grid */}

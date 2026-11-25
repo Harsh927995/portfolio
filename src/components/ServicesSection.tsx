@@ -23,10 +23,9 @@ export const ServicesSection: React.FC = () => {
         <div>
           <h2
             id="services-heading"
-            className="font-display text-2xl sm:text-3xl font-bold text-[#e1fdff] flex items-center gap-4 mb-2"
+            className="font-display text-2xl sm:text-3xl font-bold text-[#e1fdff] mb-2 text-left"
           >
-            <span className="w-12 h-1 bg-accent shadow-[0_0_12px_var(--theme-primary)] inline-block rounded-full"></span>
-            <span>Core Engineering Capabilities</span>
+            Core Engineering Capabilities
           </h2>
           <p className="font-sans text-sm sm:text-base text-[#b9cacb] max-w-xl text-left">
             Production-grade competencies in full-stack architecture, high-density developer tooling, and modern frontend systems.

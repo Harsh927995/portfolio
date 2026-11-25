@@ -17,10 +17,9 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenResume }) => {
         <div className="text-left">
           <h2
             id="about-heading"
-            className="font-display text-2xl sm:text-3xl font-bold text-[#e1fdff] flex items-center gap-4 mb-2"
+            className="font-display text-2xl sm:text-3xl font-bold text-[#e1fdff] mb-2"
           >
-            <span className="w-12 h-1 bg-accent shadow-[0_0_12px_var(--theme-primary)] inline-block rounded-full"></span>
-            <span>About Me</span>
+            About Me
           </h2>
           <p className="font-sans text-sm sm:text-base text-[#b9cacb] max-w-xl">
             A quick glimpse into my background, engineering mindset, and dedication to crafting high-impact digital products.

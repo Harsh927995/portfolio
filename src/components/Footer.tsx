@@ -15,10 +15,14 @@ export const Footer: React.FC<FooterProps> = ({ onScrollToTop }) => {
         {/* Brand */}
         <button
           onClick={onScrollToTop}
-          className="font-display text-2xl font-bold text-[#e1fdff] opacity-85 hover:opacity-100 transition-opacity text-left cursor-pointer flex items-center gap-2"
+          className="font-display text-2xl font-bold text-[#e1fdff] opacity-90 hover:opacity-100 transition-opacity text-left cursor-pointer flex items-center gap-3 group"
         >
-          <span className="text-accent">&gt;_</span>
-          <span>portfolio</span>
+          <img
+            src="/portfolio-logo.png"
+            alt="Harsh Kashyap Portfolio Logo"
+            className="w-9 h-9 rounded-lg object-cover border border-accent/40 shadow-[0_0_12px_rgb(var(--theme-primary-rgb)/0.25)] group-hover:border-accent transition-all shrink-0"
+          />
+          <span className="group-hover:text-accent transition-colors">portfolio</span>
         </button>
 
         {/* Links */}

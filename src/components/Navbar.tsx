@@ -81,9 +81,13 @@ export const Navbar: React.FC<NavbarProps> = ({
           id="brand-logo-btn"
           onClick={() => handleItemClick('home')}
           aria-label="Go to top of portfolio"
-          className="font-display text-2xl sm:text-[28px] font-black text-[#e1fdff] tracking-tight flex items-center gap-2.5 group transition-all hover:scale-105 active:scale-95 text-left cursor-pointer"
+          className="font-display text-2xl sm:text-[28px] font-black text-[#e1fdff] tracking-tight flex items-center gap-3 group transition-all hover:scale-105 active:scale-95 text-left cursor-pointer"
         >
-          <span className="text-accent font-mono text-2xl font-bold transition-transform group-hover:translate-x-0.5">&gt;_</span>
+          <img
+            src="/portfolio-logo.png"
+            alt="Harsh Kashyap Portfolio Logo"
+            className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl object-cover border border-accent/40 shadow-[0_0_16px_rgb(var(--theme-primary-rgb)/0.3)] group-hover:border-accent group-hover:shadow-[0_0_22px_rgb(var(--theme-primary-rgb)/0.5)] transition-all shrink-0"
+          />
           <span className="group-hover:text-accent transition-colors">portfolio</span>
         </button>
 

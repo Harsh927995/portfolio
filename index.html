@@ -63,18 +63,28 @@
   <meta name="twitter:image:alt" content="Harsh Kashyap - Software Engineer Portfolio Preview" />
 
   <!-- Instant Pre-paint Dark Background to Prevent White Flash -->
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('devcore-theme');
+        if (saved && saved !== 'cyber-cyan') {
+          document.documentElement.setAttribute('data-theme', saved);
+        }
+      } catch (e) {}
+    })();
+  </script>
   <style>
     :root {
       color-scheme: dark;
     }
     html, body {
-      background-color: #121414 !important;
-      color: #e2e2e2 !important;
+      background-color: #121414;
+      color: #e2e2e2;
       margin: 0;
       padding: 0;
     }
     #root {
-      background-color: #121414 !important;
+      background-color: #121414;
       min-height: 100vh;
     }
   </style>
@@ -87,8 +97,8 @@
     rel="stylesheet" />
 </head>
 
-<body class="bg-[#121414] text-[#e2e2e2] antialiased selection:bg-[#00f2ff] selection:text-[#002022] overflow-x-hidden" style="background-color: #121414; color: #e2e2e2; margin: 0; padding: 0;">
-  <div id="root" style="background-color: #121414;"></div>
+<body class="bg-surface text-[#e2e2e2] antialiased selection:bg-accent selection:text-accent-ink overflow-x-hidden" style="margin: 0; padding: 0;">
+  <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 

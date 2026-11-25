@@ -4,15 +4,15 @@
 
 ![DEV_CORE Preview](./public/og-image.png)
 
-[![React 18](https://img.shields.io/badge/React-18.3.1-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.5.3-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-5.4.2-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.1-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![React 19](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-6.2-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-00f2ff?style=for-the-badge)](LICENSE)
 
-**An interactive, next-generation engineering portfolio and telemetry console built with React 18, TypeScript, and modern Cyber-Glass aesthetics.**
+**An interactive, next-generation engineering portfolio and telemetry console built with React 19, TypeScript, and modern Cyber-Glass aesthetics.**
 
-[Live Demo](https://harsh927995.github.io/portfolio/) • [Author Profile](https://github.com/Harsh927995) • [Report Issue](https://github.com/Harsh927995/portfolio/issues)
+[Live Demo](https://harshkashyaap.netlify.app/) • [Author Profile](https://github.com/Harsh927995) • [Report Issue](https://github.com/Harsh927995/portfolio/issues)
 
 </div>
 
@@ -42,10 +42,10 @@
 
 | Layer | Technologies |
 |---|---|
-| **Frontend Framework** | React 18 (Hooks, Memoization, State Management) |
-| **Language & Typings** | TypeScript (Strict mode type safety) |
-| **Styling & Design System** | Tailwind CSS + Custom Cyber-Glass CSS Utilities |
-| **Build Tool & Bundler** | Vite 5 (Sub-second HMR, optimized tree-shaking) |
+| **Frontend Framework** | React 19 (Hooks, Memoization, Lazy Modals) |
+| **Language & Typings** | TypeScript 5.8 (Strict type safety) |
+| **Styling & Design System** | Tailwind CSS v4 + Custom Cyber-Glass CSS Utilities |
+| **Build Tool & Bundler** | Vite 6 (Sub-second HMR, optimized tree-shaking) |
 | **Icons & Visuals** | Lucide React |
 | **Fonts** | Montserrat (Display), Inter (Body), JetBrains Mono (Code/CLI) |
 
@@ -59,6 +59,8 @@ dev_core---cyber-premium-developer-portfolio/
 │   ├── og-image.png            # 1200x630 Cyber LinkedIn social preview card
 │   ├── harsh_portrait.jpg      # Official studio portrait
 │   ├── retro_phone.png         # Interactive Easter egg asset
+│   ├── robots.txt              # Search crawler directives
+│   ├── sitemap.xml             # Canonical XML sitemap
 │   └── Harsh_Kashyap_Resume.pdf# 1-Page ATS-compliant resume
 ├── src/
 │   ├── components/             # Modular UI Section Components
@@ -79,13 +81,16 @@ dev_core---cyber-premium-developer-portfolio/
 │   ├── data/
 │   │   └── portfolioData.ts    # Centralized portfolio telemetry & project data
 │   ├── types.ts                # Strict TypeScript interfaces & types
+│   ├── vite-env.d.ts           # Vite client type declarations
 │   ├── App.tsx                 # Root application controller & keyboard listeners
 │   ├── main.tsx                # React DOM entry point
-│   └── index.css               # Cyber theme tokens & glassmorphism classes
+│   └── index.css               # Tailwind v4 @theme tokens & cyber-glass classes
 ├── scripts/
 │   └── generate_resume_pdf.py  # Automated ReportLab PDF generator
 ├── index.html                  # HTML5 shell with pre-paint dark theme
-├── tailwind.config.js          # Tailored cyber color palette
+├── netlify.toml                # Netlify build & SPA rewrite config
+├── vercel.json                 # Vercel SPA rewrite config
+├── vite.config.ts              # Vite + Tailwind v4 configuration
 └── tsconfig.json               # TypeScript compiler options
 ```
 

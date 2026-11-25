@@ -2,33 +2,81 @@
 
 :root {
   color-scheme: dark;
+  --theme-primary: #00f2ff;
+  --theme-primary-rgb: 0 242 255;
+  --theme-dim: #00dbe7;
+  --theme-secondary: #ebb2ff;
+  --theme-secondary-rgb: 235 178 255;
+  --theme-ink: #002022;
+  --theme-bg: #121414;
+  --theme-bg-lowest: #0c0f0f;
+}
+
+[data-theme="electric-violet"] {
+  --theme-primary: #a855f7;
+  --theme-primary-rgb: 168 85 247;
+  --theme-dim: #8b5cf6;
+  --theme-secondary: #38bdf8;
+  --theme-secondary-rgb: 56 189 248;
+  --theme-ink: #ffffff;
+  --theme-bg: #0e0f17;
+  --theme-bg-lowest: #08090f;
+}
+
+[data-theme="cyber-emerald"] {
+  --theme-primary: #00ff88;
+  --theme-primary-rgb: 0 255 136;
+  --theme-dim: #00d974;
+  --theme-secondary: #fbbf24;
+  --theme-secondary-rgb: 251 191 36;
+  --theme-ink: #002212;
+  --theme-bg: #0f1412;
+  --theme-bg-lowest: #090d0b;
+}
+
+[data-theme="crimson-amber"] {
+  --theme-primary: #ff3b5c;
+  --theme-primary-rgb: 255 59 92;
+  --theme-dim: #e11d48;
+  --theme-secondary: #ffb020;
+  --theme-secondary-rgb: 255 176 32;
+  --theme-ink: #ffffff;
+  --theme-bg: #140f11;
+  --theme-bg-lowest: #0c090a;
 }
 
 html,
-body {
-  background-color: #121414;
+body,
+#root {
+  background-color: var(--theme-bg);
   color: #e2e2e2;
   margin: 0;
   padding: 0;
+  transition: background-color 0.25s ease;
 }
 
-@theme {
+@theme inline {
   --font-sans: 'Inter', sans-serif;
   --font-display: 'Montserrat', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  --color-surface: #121414;
-  --color-surface-dim: #121414;
-  --color-surface-lowest: #0c0f0f;
+  --color-accent: var(--theme-primary);
+  --color-accent-dim: var(--theme-dim);
+  --color-accent-secondary: var(--theme-secondary);
+  --color-accent-ink: var(--theme-ink);
+
+  --color-surface: var(--theme-bg);
+  --color-surface-dim: var(--theme-bg);
+  --color-surface-lowest: var(--theme-bg-lowest);
   --color-surface-low: #1a1c1c;
   --color-surface-mid: #1e2020;
   --color-surface-high: #282a2b;
   --color-surface-highest: #333535;
 
   --color-primary-text: #e1fdff;
-  --color-primary-cyan: #00f2ff;
-  --color-primary-dim: #00dbe7;
-  --color-secondary-purple: #ebb2ff;
+  --color-primary-cyan: var(--theme-primary);
+  --color-primary-dim: var(--theme-dim);
+  --color-secondary-purple: var(--theme-secondary);
   --color-secondary-fixed: #f8d8ff;
   --color-text-muted: #b9cacb;
   --color-outline-subtle: #3a494b;
@@ -46,15 +94,15 @@ body {
   }
 
   .neon-glow {
-    box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+    box-shadow: 0 0 20px rgb(var(--theme-primary-rgb) / 0.4);
   }
   
   .neon-glow-purple {
-    box-shadow: 0 0 20px rgba(235, 178, 255, 0.35);
+    box-shadow: 0 0 20px rgb(var(--theme-secondary-rgb) / 0.35);
   }
 
   .neon-text-glow {
-    text-shadow: 0 0 10px rgba(0, 219, 231, 0.5);
+    text-shadow: 0 0 10px rgb(var(--theme-primary-rgb) / 0.5);
   }
 
   .surface-glass {
@@ -68,7 +116,7 @@ body {
     background: rgba(255, 255, 255, 0.07);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(0, 242, 255, 0.3);
+    border: 1px solid rgb(var(--theme-primary-rgb) / 0.3);
   }
 
   .clickable {
@@ -82,27 +130,123 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0c0f0f;
+  background: var(--theme-bg-lowest);
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #00f2ff;
+  background-color: var(--theme-primary);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #74f5ff;
+  background-color: var(--theme-secondary);
 }
 
 /* IDE Window Controls */
 .mac-controls {
   display: flex;
+  align-items: center;
   gap: 6px;
 }
+.mac-controls button,
 .mac-controls span {
   width: 12px;
   height: 12px;
   border-radius: 50%;
   display: inline-block;
+  padding: 0;
+  border: 0;
+  flex-shrink: 0;
 }
 .mac-close { background-color: #ff5f56; }
 .mac-min { background-color: #ffbd2e; }
 .mac-max { background-color: #27c93f; }
+
+/* Animated Cyber Cursor */
+html.cyber-cursor-active,
+html.cyber-cursor-active body,
+html.cyber-cursor-active a,
+html.cyber-cursor-active button,
+html.cyber-cursor-active [role="button"],
+html.cyber-cursor-active [role="link"],
+html.cyber-cursor-active .cursor-pointer {
+  cursor: none !important;
+}
+
+html.cyber-cursor-active input,
+html.cyber-cursor-active textarea,
+html.cyber-cursor-active select {
+  cursor: text !important;
+}
+
+@keyframes cyber-ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0.4);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.2);
+    opacity: 0;
+  }
+}
+
+.animate-cyber-ripple {
+  animation: cyber-ripple 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Clean Print Layout for Resume Modal */
+@media print {
+  @page {
+    margin: 0.45in;
+  }
+
+  html,
+  body,
+  #root {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  #root:has(#resume-modal-root) > div > *:not(#resume-modal-root) {
+    display: none !important;
+  }
+
+  #resume-modal-root {
+    position: static !important;
+    inset: auto !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  #resume-modal-card {
+    max-width: 100% !important;
+    max-height: none !important;
+    overflow: visible !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  #printable-resume {
+    padding: 0 !important;
+    overflow: visible !important;
+    color: #1f2937 !important;
+  }
+
+  #printable-resume * {
+    color: #111827 !important;
+    background-color: transparent !important;
+    border-color: #d1d5db !important;
+    box-shadow: none !important;
+  }
+
+  #printable-resume a {
+    text-decoration: underline !important;
+  }
+}

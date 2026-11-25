@@ -35,8 +35,8 @@ export class ErrorBoundary extends React.Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-[#121414] text-[#e2e2e2] flex items-center justify-center p-6 font-sans">
-          <div className="w-full max-w-lg p-8 rounded-2xl bg-[#0c0f0f] border border-red-500/30 shadow-[0_0_40px_rgba(255,0,0,0.2)] text-center space-y-6">
+        <div className="min-h-screen bg-surface text-[#e2e2e2] flex items-center justify-center p-6 font-sans">
+          <div className="w-full max-w-lg p-8 rounded-2xl bg-surface-lowest border border-red-500/30 shadow-[0_0_40px_rgba(255,0,0,0.2)] text-center space-y-6">
             <div className="w-16 h-16 mx-auto rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 shadow-[0_0_20px_rgba(239,68,68,0.3)]">
               <AlertTriangle className="w-8 h-8" />
             </div>
@@ -55,7 +55,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
 
             <button
               onClick={this.handleReload}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded bg-[#00f2ff] text-[#002022] font-display font-bold text-sm hover:shadow-[0_0_20px_rgba(0,242,255,0.5)] transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded bg-accent text-accent-ink font-display font-bold text-sm hover:shadow-[0_0_20px_rgb(var(--theme-primary-rgb)/0.5)] transition-all cursor-pointer"
             >
               <RefreshCw className="w-4 h-4" />
               <span>Reboot Kernel</span>

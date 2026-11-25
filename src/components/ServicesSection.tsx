@@ -25,7 +25,7 @@ export const ServicesSection: React.FC = () => {
             id="services-heading"
             className="font-display text-2xl sm:text-3xl font-bold text-[#e1fdff] flex items-center gap-4 mb-2"
           >
-            <span className="w-12 h-1 bg-[#00f2ff] shadow-[0_0_12px_#00f2ff] inline-block rounded-full"></span>
+            <span className="w-12 h-1 bg-accent shadow-[0_0_12px_var(--theme-primary)] inline-block rounded-full"></span>
             <span>Core Engineering Capabilities</span>
           </h2>
           <p className="font-sans text-sm sm:text-base text-[#b9cacb] max-w-xl text-left">
@@ -39,7 +39,7 @@ export const ServicesSection: React.FC = () => {
         {SERVICES_DATA.map((service) => (
           <div
             key={service.id}
-            className="surface-glass rounded-xl p-8 flex flex-col justify-between border border-white/10 hover:border-[#00f2ff]/60 hover:shadow-[0_0_30px_rgba(0,242,255,0.2)] transition-all duration-300 group text-left relative overflow-hidden"
+            className="surface-glass rounded-xl p-8 flex flex-col justify-between border border-white/10 hover:border-accent/60 hover:shadow-[0_0_30px_rgb(var(--theme-primary-rgb)/0.2)] transition-all duration-300 group text-left relative overflow-hidden"
           >
             {/* Top Border Glow Strip */}
             <span
@@ -54,7 +54,7 @@ export const ServicesSection: React.FC = () => {
               </div>
 
               {/* Service Title */}
-              <h3 className="font-display text-xl font-bold text-[#e1fdff] group-hover:text-[#00f2ff] transition-colors mb-3">
+              <h3 className="font-display text-xl font-bold text-[#e1fdff] group-hover:text-accent transition-colors mb-3">
                 {service.title}
               </h3>
 

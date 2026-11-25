@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { SystemDiagnosticsSection } from './components/SystemDiagnosticsSection';
@@ -8,19 +8,35 @@ import { ProjectsSection } from './components/ProjectsSection';
 import { EducationSection } from './components/EducationSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
-import { ResumeModal } from './components/ResumeModal';
-import { InteractiveTerminalModal } from './components/InteractiveTerminalModal';
-import { ProjectDetailModal } from './components/ProjectDetailModal';
-import { ContactCardModal } from './components/ContactCardModal';
+import { CyberCursor } from './components/CyberCursor';
 import { Project } from './types';
+import { ThemeId, getStoredTheme, applyTheme } from './data/themes';
+
+const ResumeModal = lazy(() =>
+  import('./components/ResumeModal').then((m) => ({ default: m.ResumeModal }))
+);
+const InteractiveTerminalModal = lazy(() =>
+  import('./components/InteractiveTerminalModal').then((m) => ({ default: m.InteractiveTerminalModal }))
+);
+const ProjectDetailModal = lazy(() =>
+  import('./components/ProjectDetailModal').then((m) => ({ default: m.ProjectDetailModal }))
+);
+const ContactCardModal = lazy(() =>
+  import('./components/ContactCardModal').then((m) => ({ default: m.ContactCardModal }))
+);
 
 export default function App() {
+  const [theme, setTheme] = useState<ThemeId>(() => getStoredTheme());
   const [activeSection, setActiveSection] = useState<string>('home');
   const [selectedTechFilter, setSelectedTechFilter] = useState<string | null>(null);
   const [isResumeOpen, setIsResumeOpen] = useState<boolean>(false);
   const [isTerminalOpen, setIsTerminalOpen] = useState<boolean>(false);
   const [isContactCardOpen, setIsContactCardOpen] = useState<boolean>(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  useEffect(() => {
+    applyTheme(theme);
+  }, [theme]);
 
   // Global Keyboard shortcuts: press '~' or 'Ctrl+K' to toggle CLI Terminal
   useEffect(() => {
@@ -69,7 +85,7 @@ export default function App() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -95,13 +111,18 @@ export default function App() {
   };
 
   return (
-    <div className="bg-[#121414] text-[#e2e2e2] min-h-screen flex flex-col font-sans selection:bg-[#00f2ff] selection:text-[#002022] overflow-x-hidden">
+    <div className="bg-surface text-[#e2e2e2] min-h-screen flex flex-col font-sans selection:bg-accent selection:text-accent-ink overflow-x-hidden transition-colors duration-300">
+      {/* Animated Cyber Cursor (desktop fine-pointer only) */}
+      <CyberCursor />
+
       {/* Fixed Cyber Navbar */}
       <Navbar
         activeSection={activeSection}
         onNavigate={handleNavigate}
         onOpenResume={() => setIsResumeOpen(true)}
         onOpenTerminal={() => setIsTerminalOpen(true)}
+        theme={theme}
+        onChangeTheme={setTheme}
       />
 
       {/* Main Content Sections */}
@@ -143,33 +164,45 @@ export default function App() {
       {/* Cyber Footer */}
       <Footer onScrollToTop={() => handleNavigate('home')} />
 
-      {/* Interactive CLI Terminal Modal */}
-      <InteractiveTerminalModal
-        isOpen={isTerminalOpen}
-        onClose={() => setIsTerminalOpen(false)}
-        onOpenResume={() => {
-          setIsTerminalOpen(false);
-          setIsResumeOpen(true);
-        }}
-      />
+      <Suspense fallback={null}>
+        {/* Interactive CLI Terminal Modal */}
+        {isTerminalOpen && (
+          <InteractiveTerminalModal
+            isOpen={isTerminalOpen}
+            onClose={() => setIsTerminalOpen(false)}
+            onOpenResume={() => {
+              setIsTerminalOpen(false);
+              setIsResumeOpen(true);
+            }}
+            theme={theme}
+            onChangeTheme={setTheme}
+          />
+        )}
 
-      {/* Executive CV / Resume Modal */}
-      <ResumeModal
-        isOpen={isResumeOpen}
-        onClose={() => setIsResumeOpen(false)}
-      />
+        {/* Executive CV / Resume Modal */}
+        {isResumeOpen && (
+          <ResumeModal
+            isOpen={isResumeOpen}
+            onClose={() => setIsResumeOpen(false)}
+          />
+        )}
 
-      {/* Architecture Specs Modal */}
-      <ProjectDetailModal
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
+        {/* Architecture Specs Modal */}
+        {selectedProject && (
+          <ProjectDetailModal
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+          />
+        )}
 
-      {/* Profile & Contact Card Popup Modal */}
-      <ContactCardModal
-        isOpen={isContactCardOpen}
-        onClose={() => setIsContactCardOpen(false)}
-      />
+        {/* Profile & Contact Card Popup Modal */}
+        {isContactCardOpen && (
+          <ContactCardModal
+            isOpen={isContactCardOpen}
+            onClose={() => setIsContactCardOpen(false)}
+          />
+        )}
+      </Suspense>
     </div>
   );
 }

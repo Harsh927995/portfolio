@@ -50,11 +50,9 @@ export const AnimatedLetters: React.FC<AnimatedLettersProps> = ({
                   }}
                   whileHover={{
                     y: -5,
-                    color: '#00f2ff',
-                    textShadow: '0 0 16px rgba(0, 242, 255, 0.75)',
                     transition: { duration: 0.15, ease: 'easeOut' },
                   }}
-                  className="inline-block transition-colors duration-150 cursor-default select-none"
+                  className="inline-block transition-colors duration-150 hover:text-accent hover:[text-shadow:0_0_16px_rgb(var(--theme-primary-rgb)/0.75)] cursor-default select-none"
                 >
                   {char}
                 </motion.span>

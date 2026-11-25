@@ -1,6 +1,6 @@
 import React from 'react';
 import { EDUCATION_DATA } from '../data/portfolioData';
-import { GraduationCap, Calendar, Award } from 'lucide-react';
+import { GraduationCap, Calendar } from 'lucide-react';
 
 export const EducationSection: React.FC = () => {
   return (
@@ -12,7 +12,7 @@ export const EducationSection: React.FC = () => {
             id="education-heading"
             className="font-display text-2xl sm:text-3xl font-bold text-[#e1fdff] flex items-center gap-4 mb-2"
           >
-            <span className="w-12 h-1 bg-[#00f2ff] shadow-[0_0_12px_#00f2ff] inline-block rounded-full"></span>
+            <span className="w-12 h-1 bg-accent shadow-[0_0_12px_var(--theme-primary)] inline-block rounded-full"></span>
             <span>Academic & Technical Education</span>
           </h2>
           <p className="font-sans text-sm sm:text-base text-[#b9cacb] max-w-xl">
@@ -26,21 +26,21 @@ export const EducationSection: React.FC = () => {
         {EDUCATION_DATA.map((item, index) => (
           <div
             key={index}
-            className="surface-glass rounded-xl p-8 flex flex-col justify-between border border-white/10 hover:border-[#00f2ff]/60 hover:shadow-[0_0_24px_rgba(0,242,255,0.2)] transition-all duration-300 group text-left relative overflow-hidden"
+            className="surface-glass rounded-xl p-8 flex flex-col justify-between border border-white/10 hover:border-accent/60 hover:shadow-[0_0_24px_rgb(var(--theme-primary-rgb)/0.2)] transition-all duration-300 group text-left relative overflow-hidden"
           >
             <div>
               {/* Header Badge */}
               <div className="flex justify-between items-start mb-5">
-                <div className="w-10 h-10 rounded-lg bg-black/40 border border-white/10 flex items-center justify-center text-[#00f2ff]">
+                <div className="w-10 h-10 rounded-lg bg-black/40 border border-white/10 flex items-center justify-center text-accent">
                   <GraduationCap className="w-5 h-5" />
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs text-[#ebb2ff] bg-[#ebb2ff]/10 px-2.5 py-0.5 rounded border border-[#ebb2ff]/20 uppercase">
+                  <span className="font-mono text-xs text-accent-secondary bg-accent-secondary/10 px-2.5 py-0.5 rounded border border-accent-secondary/20 uppercase">
                     {item.status}
                   </span>
                   {item.grade && (
-                    <span className="font-mono text-xs font-bold text-[#00f2ff]">
+                    <span className="font-mono text-xs font-bold text-accent">
                       {item.grade}
                     </span>
                   )}
@@ -48,11 +48,11 @@ export const EducationSection: React.FC = () => {
               </div>
 
               {/* Degree & Institution */}
-              <h3 className="font-display text-xl font-bold text-[#e1fdff] group-hover:text-[#00f2ff] transition-colors mb-1.5">
+              <h3 className="font-display text-xl font-bold text-[#e1fdff] group-hover:text-accent transition-colors mb-1.5">
                 {item.degree}
               </h3>
 
-              <p className="font-display text-xs font-semibold text-[#00f2ff] tracking-wider uppercase mb-1">
+              <p className="font-display text-xs font-semibold text-accent tracking-wider uppercase mb-1">
                 {item.institution}
               </p>
 

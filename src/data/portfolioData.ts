@@ -144,11 +144,11 @@ export const SYSTEM_METRICS: SystemMetric[] = [
     detail: 'Performance, Accessibility, SEO, Best Practices'
   },
   {
-    id: 'concurrency',
-    label: 'Handled RPS',
-    value: '120,000+',
+    id: 'bundle',
+    label: 'Gzip Bundle',
+    value: '~126 kB',
     status: 'live',
-    detail: 'Peak distributed benchmark load capacity'
+    detail: 'Tree-shaken Vite production JS payload'
   }
 ];
 
@@ -158,21 +158,21 @@ export const SERVICES_DATA: ServiceItem[] = [
     title: 'Frontend & Web Development',
     desc: 'Building responsive Single Page Applications (SPAs) with optimized rendering patterns, modern CSS layouts, and clean React architecture.',
     iconName: 'code',
-    color: '#00f2ff'
+    color: 'var(--theme-primary)'
   },
   {
     id: 'frontend',
     title: 'UI Optimization & Architecture',
     desc: 'Crafting performant client experiences using React useMemo hooks, Vite bundling, URL query parameter state routing, and responsive design systems.',
     iconName: 'layers',
-    color: '#ebb2ff'
+    color: 'var(--theme-secondary)'
   },
   {
     id: 'academic',
     title: 'Knowledge of AI',
     desc: 'Foundational development with Generative AI architectures, prompt engineering, NLP concepts, and Python data libraries (NumPy, Pandas, Streamlit).',
     iconName: 'cpu',
-    color: '#00dbe7'
+    color: 'var(--theme-dim)'
   }
 ];
 
@@ -231,11 +231,11 @@ export const PROJECTS: Project[] = [
       'High-performance ATS-compliant 1-page PDF curriculum vitae generator with real-time download.',
       'Zero-FOUC dark theme with tailored cyber glassmorphism micro-interactions.'
     ],
-    techStack: ['React 18', 'TypeScript', 'Tailwind CSS', 'Vite'],
+    techStack: ['React 19', 'TypeScript', 'Tailwind CSS', 'Vite'],
     metrics: [
-      { label: 'Uptime SLA', value: '99.98%' },
-      { label: 'Vite HMR', value: '< 150ms' },
-      { label: 'Lighthouse', value: '99 / 100' }
+      { label: 'Gzip Bundle', value: '~126 kB' },
+      { label: 'Vite HMR', value: '< 180ms' },
+      { label: 'Lighthouse', value: '100 / 100' }
     ],
     githubUrl: 'https://github.com/Harsh927995/portfolio',
     liveUrl: 'https://github.com/Harsh927995/portfolio',

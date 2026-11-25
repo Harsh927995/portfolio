@@ -1,13 +1,31 @@
 import React, { useState, useMemo } from 'react';
 import { Project } from '../types';
 import { PROJECTS } from '../data/portfolioData';
-import { Github, Layers, ArrowUpRight, Sparkles, ExternalLink } from 'lucide-react';
+import { Github, Layers, ArrowUpRight, Sparkles } from 'lucide-react';
 
 interface ProjectsSectionProps {
   selectedTechFilter?: string | null;
   onClearTechFilter?: () => void;
   onSelectProject: (project: Project) => void;
 }
+
+const normalizeTechTokens = (value: string): string[] => {
+  return value
+    .toLowerCase()
+    .replace(/\([^)]*\)/g, '')
+    .split('&')
+    .map((part) => part.replace(/\.js$/i, '').replace(/\s+\d+(\.\d+)*$/g, '').trim())
+    .filter(Boolean);
+};
+
+const matchesTechFilter = (techStack: string[], filter: string): boolean => {
+  const filterTokens = normalizeTechTokens(filter);
+  return techStack.some((tech) => {
+    if (tech.toLowerCase() === filter.toLowerCase()) return true;
+    const techTokens = normalizeTechTokens(tech);
+    return filterTokens.some((token) => techTokens.includes(token));
+  });
+};
 
 export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   selectedTechFilter,
@@ -32,7 +50,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   const filteredProjects = useMemo(() => {
     return PROJECTS.filter((p) => {
       const matchesCategory = activeCategory === 'all' || p.category === activeCategory;
-      const matchesTech = !selectedTechFilter || p.techStack.includes(selectedTechFilter);
+      const matchesTech = !selectedTechFilter || matchesTechFilter(p.techStack, selectedTechFilter);
       const matchesSearch =
         !searchQuery ||
         p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -62,7 +80,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
             id="projects-main-heading"
             className="font-display text-2xl sm:text-3xl font-bold text-[#e1fdff] flex items-center gap-4 mb-2"
           >
-            <span className="w-12 h-1 bg-[#00f2ff] shadow-[0_0_12px_#00f2ff] inline-block rounded-full"></span>
+            <span className="w-12 h-1 bg-accent shadow-[0_0_12px_var(--theme-primary)] inline-block rounded-full"></span>
             <span>Featured Engineering Deployments</span>
           </h2>
           <p className="font-sans text-sm sm:text-base text-[#b9cacb] max-w-xl">
@@ -72,11 +90,12 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
 
         {/* Selected Tech Filter Banner */}
         {selectedTechFilter && (
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00f2ff]/10 border border-[#00f2ff]/30 text-xs font-mono text-[#00f2ff]">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/30 text-xs font-mono text-accent">
             <span>Filter: <strong>{selectedTechFilter}</strong></span>
             <button
               onClick={onClearTechFilter}
-              className="ml-1 text-white hover:text-[#00f2ff] font-bold"
+              aria-label="Clear technology filter"
+              className="ml-1 text-white hover:text-accent font-bold cursor-pointer"
             >
               ✕
             </button>
@@ -94,7 +113,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
               onClick={() => setActiveCategory(cat.id)}
               className={`font-display text-xs sm:text-sm px-4 py-2 rounded transition-all cursor-pointer ${
                 activeCategory === cat.id
-                  ? 'bg-white/10 text-[#00f2ff] font-bold border border-[#00f2ff]/40 shadow-[0_0_12px_rgba(0,242,255,0.25)]'
+                  ? 'bg-white/10 text-accent font-bold border border-accent/40 shadow-[0_0_12px_rgb(var(--theme-primary-rgb)/0.25)]'
                   : 'text-[#b9cacb] hover:text-[#e1fdff] hover:bg-white/5'
               }`}
             >
@@ -110,7 +129,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
             placeholder="Search stack or architecture..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[#0c0f0f] text-xs font-mono text-[#e1fdff] px-3 py-2 rounded border border-white/10 focus:border-[#00f2ff] focus:outline-none placeholder-[#b9cacb]/40"
+            className="w-full bg-surface-lowest text-xs font-mono text-[#e1fdff] px-3 py-2 rounded border border-white/10 focus:border-accent focus:outline-none placeholder-[#b9cacb]/40"
           />
         </div>
       </div>
@@ -125,11 +144,20 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
               key={project.id}
               id={`project-card-${project.id}`}
               onClick={() => handleOpenProjectUrl(project)}
-              className="surface-glass rounded-xl p-6 sm:p-8 lg:p-10 border border-white/10 hover:border-[#00f2ff]/70 hover:shadow-[0_0_35px_rgba(0,242,255,0.25)] transition-all duration-300 group cursor-pointer text-left relative overflow-hidden"
+              onKeyDown={(e) => {
+                if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) {
+                  e.preventDefault();
+                  handleOpenProjectUrl(project);
+                }
+              }}
+              role="link"
+              tabIndex={0}
+              aria-label={`Open ${project.title} repository`}
+              className="surface-glass rounded-xl p-6 sm:p-8 lg:p-10 border border-white/10 hover:border-accent/70 hover:shadow-[0_0_35px_rgb(var(--theme-primary-rgb)/0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-all duration-300 group cursor-pointer text-left relative overflow-hidden"
               title="Click to visit project repository on GitHub"
             >
               {/* Top Accent Line on Hover */}
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#00f2ff] via-[#ebb2ff] to-[#00f2ff] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent via-accent-secondary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
               {/* 2-Column Responsive Layout on Desktop */}
               <div className="flex flex-col md:flex-row gap-8 lg:gap-12 items-stretch">
@@ -139,12 +167,12 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                   <div>
                     {/* Header Badge */}
                     <div className="flex items-center gap-3 mb-4 flex-wrap">
-                      <span className="text-[11px] font-mono text-[#ebb2ff] uppercase tracking-wider bg-[#ebb2ff]/10 px-3 py-1 rounded border border-[#ebb2ff]/20">
+                      <span className="text-[11px] font-mono text-accent-secondary uppercase tracking-wider bg-accent-secondary/10 px-3 py-1 rounded border border-accent-secondary/20">
                         {project.category}
                       </span>
 
                       {project.featured && (
-                        <span className="text-[11px] font-mono text-[#00f2ff] flex items-center gap-1.5 bg-[#00f2ff]/10 px-3 py-1 rounded-full border border-[#00f2ff]/30">
+                        <span className="text-[11px] font-mono text-accent flex items-center gap-1.5 bg-accent/10 px-3 py-1 rounded-full border border-accent/30">
                           <Sparkles className="w-3.5 h-3.5" />
                           <span>Featured Engineering Deployment</span>
                         </span>
@@ -158,10 +186,10 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="font-display text-2xl sm:text-3xl font-bold text-[#e1fdff] group-hover:text-[#00f2ff] transition-colors inline-flex items-center gap-2.5"
+                        className="font-display text-2xl sm:text-3xl font-bold text-[#e1fdff] group-hover:text-accent transition-colors inline-flex items-center gap-2.5"
                       >
                         <span>{project.title}</span>
-                        <ArrowUpRight className="w-6 h-6 text-[#00f2ff] opacity-80 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform shrink-0" />
+                        <ArrowUpRight className="w-6 h-6 text-accent opacity-80 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform shrink-0" />
                       </a>
                     </div>
 
@@ -174,7 +202,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                     <div className="space-y-2 mb-6 border-t border-white/5 pt-4">
                       {project.architecture.slice(0, 3).map((point, idx) => (
                         <div key={idx} className="text-xs text-slate-300 flex items-center gap-2 font-mono">
-                          <span className={`w-1.5 h-1.5 rounded-full ${idx % 2 === 1 ? 'bg-[#ebb2ff]' : 'bg-[#00f2ff]'}`} />
+                          <span className={`w-1.5 h-1.5 rounded-full ${idx % 2 === 1 ? 'bg-accent-secondary' : 'bg-accent'}`} />
                           <span>{point}</span>
                         </div>
                       ))}
@@ -206,13 +234,13 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                       {project.metrics.map((m, idx) => (
                         <div key={idx} className="text-center">
                           <div className="text-[10px] font-mono text-[#b9cacb]/70 truncate">{m.label}</div>
-                          <div className="text-xs sm:text-sm font-mono font-bold text-[#00f2ff] mt-0.5">{m.value}</div>
+                          <div className="text-xs sm:text-sm font-mono font-bold text-accent mt-0.5">{m.value}</div>
                         </div>
                       ))}
                     </div>
 
                     <div className="p-4 rounded-lg bg-black/25 border border-white/5 text-xs text-[#b9cacb] leading-relaxed mb-6 font-mono">
-                      Deployment Node: <span className="text-[#00f2ff]">{project.githubUrl ? project.githubUrl.replace('https://', '') : 'github.com/Harsh927995'}</span>
+                      Deployment Node: <span className="text-accent">{project.githubUrl ? project.githubUrl.replace('https://', '') : 'github.com/Harsh927995'}</span>
                       <br />
                       Status: <span className="text-[#00ff66]">Active // Open Source</span>
                     </div>
@@ -226,7 +254,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="w-full py-3 px-4 rounded-lg text-xs font-display font-bold bg-[#00f2ff] text-[#002022] hover:shadow-[0_0_25px_rgba(0,242,255,0.6)] active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                        className="w-full py-3 px-4 rounded-lg text-xs font-display font-bold bg-accent text-accent-ink hover:shadow-[0_0_25px_rgb(var(--theme-primary-rgb)/0.6)] active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
                         title="Open project on GitHub"
                       >
                         <Github className="w-4 h-4" />
@@ -240,10 +268,10 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                         e.stopPropagation();
                         onSelectProject(project);
                       }}
-                      className="w-full py-2.5 px-4 rounded-lg text-xs font-display font-semibold text-[#e1fdff] bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#00f2ff]/40 flex items-center justify-center gap-2 cursor-pointer transition-colors"
+                      className="w-full py-2.5 px-4 rounded-lg text-xs font-display font-semibold text-[#e1fdff] bg-white/5 hover:bg-white/10 border border-white/10 hover:border-accent/40 flex items-center justify-center gap-2 cursor-pointer transition-colors"
                       title="View detailed architecture specifications"
                     >
-                      <Layers className="w-4 h-4 text-[#00f2ff]" />
+                      <Layers className="w-4 h-4 text-accent" />
                       <span>Architecture Specs</span>
                     </button>
                   </div>
@@ -258,14 +286,18 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
 
       {filteredProjects.length === 0 && (
         <div className="py-16 text-center text-[#b9cacb] font-mono text-sm surface-glass rounded-xl border border-white/10">
-          <p>No deployment matching current query filters.</p>
+          <p>
+            {selectedTechFilter
+              ? `No featured deployment tagged with "${selectedTechFilter}".`
+              : 'No deployment matching current query filters.'}
+          </p>
           <button
             onClick={() => {
               setActiveCategory('all');
               setSearchQuery('');
               if (onClearTechFilter) onClearTechFilter();
             }}
-            className="mt-3 text-xs text-[#00f2ff] underline font-semibold"
+            className="mt-3 text-xs text-accent underline font-semibold cursor-pointer"
           >
             Reset all filters
           </button>

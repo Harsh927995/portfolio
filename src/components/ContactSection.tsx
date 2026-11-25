@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { DEVELOPER_PROFILE } from '../data/portfolioData';
-import { Mail, MapPin, Send, CheckCircle2, Github, Linkedin, Twitter, Radio, Phone } from 'lucide-react';
+import { Mail, MapPin, Send, CheckCircle2, AlertCircle, Github, Linkedin, Radio, Phone, ExternalLink } from 'lucide-react';
 
 interface ContactSectionProps {
   onOpenContactCard?: () => void;
@@ -12,6 +12,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenContactCar
     email: '',
     subject: '',
     message: '',
+    honeypot: '',
   });
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState<{ text: string; type: 'success' | 'error' | '' }>({
@@ -23,21 +24,94 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenContactCar
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const buildMailtoHref = () => {
+    const subject = encodeURIComponent(form.subject || `Portfolio Inquiry from ${form.name || 'Visitor'}`);
+    const body = encodeURIComponent(
+      `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`
+    );
+    return `mailto:${DEVELOPER_PROFILE.email}?subject=${subject}&body=${body}`;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (form.honeypot) return;
+
     setSubmitting(true);
     setStatus({ text: '', type: '' });
 
-    // Simulate sending transmission
-    setTimeout(() => {
-      setSubmitting(false);
+    const formspreeEndpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT;
+    const web3FormsKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+
+    try {
+      let response: Response;
+
+      if (formspreeEndpoint) {
+        response = await fetch(formspreeEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({
+            name: form.name,
+            email: form.email,
+            subject: form.subject,
+            message: form.message,
+          }),
+        });
+      } else if (web3FormsKey) {
+        response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({
+            access_key: web3FormsKey,
+            name: form.name,
+            email: form.email,
+            subject: form.subject,
+            message: form.message,
+          }),
+        });
+      } else {
+        response = await fetch(`https://formsubmit.co/ajax/${DEVELOPER_PROFILE.email}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({
+            name: form.name,
+            email: form.email,
+            _subject: `[Portfolio] ${form.subject}`,
+            _template: 'table',
+            message: form.message,
+          }),
+        });
+      }
+
+      const data = await response.json().catch(() => ({}));
+      const isOk = response.ok && data.success !== false && data.success !== 'false';
+
+      if (!isOk) {
+        throw new Error(data.message || 'Transmission endpoint rejected the request.');
+      }
+
       setStatus({
-        text: '✓ Packet transmission verified. Response will be dispatched to your coordinates.',
+        text: 'Packet transmitted successfully. Harsh will reply to your email shortly.',
         type: 'success',
       });
-      setForm({ name: '', email: '', subject: '', message: '' });
-      setTimeout(() => setStatus({ text: '', type: '' }), 6000);
-    }, 1000);
+      setForm({ name: '', email: '', subject: '', message: '', honeypot: '' });
+      setTimeout(() => setStatus({ text: '', type: '' }), 7000);
+    } catch {
+      setStatus({
+        text: 'Direct transmission could not reach the relay right now. Use the email button below to send directly via your mail app.',
+        type: 'error',
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -49,7 +123,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenContactCar
             id="contact-heading"
             className="font-display text-2xl sm:text-3xl font-bold text-[#e1fdff] flex items-center gap-4 mb-2"
           >
-            <span className="w-12 h-1 bg-[#00f2ff] shadow-[0_0_12px_#00f2ff] inline-block rounded-full"></span>
+            <span className="w-12 h-1 bg-accent shadow-[0_0_12px_var(--theme-primary)] inline-block rounded-full"></span>
             <span>Initiate Direct Transmission</span>
           </h2>
           <p className="font-sans text-sm sm:text-base text-[#b9cacb] max-w-xl">
@@ -57,8 +131,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenContactCar
           </p>
         </div>
 
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-[#00f2ff]">
-          <span className="w-2 h-2 rounded-full bg-[#00f2ff] animate-pulse"></span>
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-accent">
+          <span className="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
           <span>{DEVELOPER_PROFILE.status}</span>
         </div>
       </div>
@@ -68,78 +142,92 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenContactCar
         
         {/* Left Column: Transmission Form */}
         <div className="lg:col-span-7 surface-glass p-8 sm:p-10 rounded-xl border border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.6)] text-left">
-          <div className="flex items-center gap-2 font-mono text-xs text-[#00f2ff] mb-6">
-            <Radio className="w-4 h-4 text-[#00f2ff]" />
+          <div className="flex items-center gap-2 font-mono text-xs text-accent mb-6">
+            <Radio className="w-4 h-4 text-accent" />
             <span>TRANSMISSION_PROTOCOL // SECURE_SOCKET</span>
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+            <input
+              type="text"
+              name="honeypot"
+              value={form.honeypot}
+              onChange={handleInputChange}
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="hidden"
+            />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
-                <label className="block font-mono text-xs text-[#b9cacb] mb-2 uppercase">
+                <label htmlFor="contact-name" className="block font-mono text-xs text-[#b9cacb] mb-2 uppercase">
                   Sender Identity
                 </label>
                 <input
+                  id="contact-name"
                   type="text"
                   name="name"
                   value={form.name}
                   onChange={handleInputChange}
                   required
                   placeholder="e.g. Alex Mercer"
-                  className="w-full bg-[#0c0f0f] border border-white/10 rounded px-4 py-2.5 text-xs sm:text-sm font-mono text-[#e1fdff] focus:border-[#00f2ff] focus:outline-none placeholder-[#b9cacb]/40"
+                  className="w-full bg-surface-lowest border border-white/10 rounded px-4 py-2.5 text-xs sm:text-sm font-mono text-[#e1fdff] focus:border-accent focus:outline-none placeholder-[#b9cacb]/40"
                 />
               </div>
 
               <div>
-                <label className="block font-mono text-xs text-[#b9cacb] mb-2 uppercase">
+                <label htmlFor="contact-email" className="block font-mono text-xs text-[#b9cacb] mb-2 uppercase">
                   Return Coordinates (Email)
                 </label>
                 <input
+                  id="contact-email"
                   type="email"
                   name="email"
                   value={form.email}
                   onChange={handleInputChange}
                   required
                   placeholder="alex@enterprise.com"
-                  className="w-full bg-[#0c0f0f] border border-white/10 rounded px-4 py-2.5 text-xs sm:text-sm font-mono text-[#e1fdff] focus:border-[#00f2ff] focus:outline-none placeholder-[#b9cacb]/40"
+                  className="w-full bg-surface-lowest border border-white/10 rounded px-4 py-2.5 text-xs sm:text-sm font-mono text-[#e1fdff] focus:border-accent focus:outline-none placeholder-[#b9cacb]/40"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block font-mono text-xs text-[#b9cacb] mb-2 uppercase">
+              <label htmlFor="contact-subject" className="block font-mono text-xs text-[#b9cacb] mb-2 uppercase">
                 Subject
               </label>
               <input
+                id="contact-subject"
                 type="text"
                 name="subject"
                 value={form.subject}
                 onChange={handleInputChange}
                 required
                 placeholder="Contract / Full-Time Engineering Opportunity"
-                className="w-full bg-[#0c0f0f] border border-white/10 rounded px-4 py-2.5 text-xs sm:text-sm font-mono text-[#e1fdff] focus:border-[#00f2ff] focus:outline-none placeholder-[#b9cacb]/40"
+                className="w-full bg-surface-lowest border border-white/10 rounded px-4 py-2.5 text-xs sm:text-sm font-mono text-[#e1fdff] focus:border-accent focus:outline-none placeholder-[#b9cacb]/40"
               />
             </div>
 
             <div>
-              <label className="block font-mono text-xs text-[#b9cacb] mb-2 uppercase">
+              <label htmlFor="contact-message" className="block font-mono text-xs text-[#b9cacb] mb-2 uppercase">
                 Payload Message
               </label>
               <textarea
+                id="contact-message"
                 name="message"
                 value={form.message}
                 onChange={handleInputChange}
                 required
                 rows={5}
                 placeholder="Detail the technical specifications, timeline, or position overview..."
-                className="w-full bg-[#0c0f0f] border border-white/10 rounded px-4 py-2.5 text-xs sm:text-sm font-mono text-[#e1fdff] focus:border-[#00f2ff] focus:outline-none placeholder-[#b9cacb]/40 resize-none"
+                className="w-full bg-surface-lowest border border-white/10 rounded px-4 py-2.5 text-xs sm:text-sm font-mono text-[#e1fdff] focus:border-accent focus:outline-none placeholder-[#b9cacb]/40 resize-none"
               />
             </div>
 
             <button
               type="submit"
               disabled={submitting}
-              className="w-full py-4 rounded bg-[#00f2ff] text-[#002022] font-display text-sm font-bold tracking-wider hover:shadow-[0_0_25px_rgba(0,242,255,0.6)] active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+              className="w-full py-4 rounded bg-accent text-accent-ink font-display text-sm font-bold tracking-wider hover:shadow-[0_0_25px_rgb(var(--theme-primary-rgb)/0.6)] active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
             >
               <Send className="w-4 h-4" />
               <span>{submitting ? 'TRANSMITTING PACKETS...' : 'DISPATCH TRANSMISSION'}</span>
@@ -147,14 +235,31 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenContactCar
 
             {status.text && (
               <div
-                className={`p-4 rounded border text-xs font-mono flex items-center gap-2.5 ${
+                role="status"
+                aria-live="polite"
+                className={`p-4 rounded border text-xs font-mono flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
                   status.type === 'success'
-                    ? 'bg-[#00f2ff]/10 border-[#00f2ff]/40 text-[#00f2ff]'
-                    : 'bg-red-500/10 border-red-500/40 text-red-400'
+                    ? 'bg-accent/10 border-accent/40 text-accent'
+                    : 'bg-red-500/10 border-red-500/40 text-red-300'
                 }`}
               >
-                <CheckCircle2 className="w-4 h-4 shrink-0" />
-                <span>{status.text}</span>
+                <div className="flex items-center gap-2.5">
+                  {status.type === 'success' ? (
+                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                  ) : (
+                    <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
+                  )}
+                  <span>{status.text}</span>
+                </div>
+                {status.type === 'error' && (
+                  <a
+                    href={buildMailtoHref()}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-white/10 hover:bg-white/20 text-[#e1fdff] border border-white/15 shrink-0 transition-colors"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    <span>Open Email App</span>
+                  </a>
+                )}
               </div>
             )}
           </form>
@@ -172,12 +277,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenContactCar
 
             <div className="space-y-4">
               <div className="flex items-center gap-3 p-3 rounded bg-black/40 border border-white/5">
-                <Mail className="w-5 h-5 text-[#00f2ff]" />
+                <Mail className="w-5 h-5 text-accent" />
                 <div>
                   <div className="text-[10px] font-mono text-[#b9cacb]/60 uppercase">Primary Email</div>
                   <a
                     href={`mailto:${DEVELOPER_PROFILE.email}`}
-                    className="text-xs sm:text-sm font-mono text-[#e1fdff] hover:text-[#00f2ff] transition-colors"
+                    className="text-xs sm:text-sm font-mono text-[#e1fdff] hover:text-accent transition-colors"
                   >
                     {DEVELOPER_PROFILE.email}
                   </a>
@@ -186,31 +291,40 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenContactCar
 
               <div
                 onClick={onOpenContactCard}
-                className="flex items-center justify-between p-3 rounded bg-black/40 border border-white/5 hover:border-[#00f2ff]/40 transition-all cursor-pointer group"
+                onKeyDown={(e) => {
+                  if (onOpenContactCard && (e.key === 'Enter' || e.key === ' ')) {
+                    e.preventDefault();
+                    onOpenContactCard();
+                  }
+                }}
+                role={onOpenContactCard ? 'button' : undefined}
+                tabIndex={onOpenContactCard ? 0 : undefined}
+                aria-label={onOpenContactCard ? 'Open Harsh Kashyap contact card' : undefined}
+                className="flex items-center justify-between p-3 rounded bg-black/40 border border-white/5 hover:border-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-all cursor-pointer group"
                 title="Click to view Contact Card"
               >
                 <div className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 text-[#00f2ff] group-hover:scale-110 transition-transform" />
+                  <Phone className="w-5 h-5 text-accent group-hover:scale-110 transition-transform" />
                   <div>
                     <div className="text-[10px] font-mono text-[#b9cacb]/60 uppercase">Direct Voice / WhatsApp</div>
                     <a
                       href={`tel:+91${DEVELOPER_PROFILE.phone}`}
                       onClick={(e) => e.stopPropagation()}
-                      className="text-xs sm:text-sm font-mono text-[#e1fdff] hover:text-[#00f2ff] transition-colors"
+                      className="text-xs sm:text-sm font-mono text-[#e1fdff] hover:text-accent transition-colors"
                     >
                       +91 {DEVELOPER_PROFILE.phone}
                     </a>
                   </div>
                 </div>
                 {onOpenContactCard && (
-                  <span className="text-[11px] font-mono text-[#00f2ff] opacity-80 group-hover:opacity-100 transition-opacity bg-[#00f2ff]/10 px-2 py-0.5 rounded border border-[#00f2ff]/30">
+                  <span className="text-[11px] font-mono text-accent opacity-80 group-hover:opacity-100 transition-opacity bg-accent/10 px-2 py-0.5 rounded border border-accent/30">
                     Card &rarr;
                   </span>
                 )}
               </div>
 
               <div className="flex items-center gap-3 p-3 rounded bg-black/40 border border-white/5">
-                <MapPin className="w-5 h-5 text-[#ebb2ff]" />
+                <MapPin className="w-5 h-5 text-accent-secondary" />
                 <div>
                   <div className="text-[10px] font-mono text-[#b9cacb]/60 uppercase">Physical Node Location</div>
                   <div className="text-xs sm:text-sm font-mono text-[#e1fdff]">
@@ -231,7 +345,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenContactCar
                 href={DEVELOPER_PROFILE.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-white/5 hover:bg-white/10 text-xs font-mono text-[#00f2ff] border border-white/10 hover:border-[#00f2ff]/40 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-white/5 hover:bg-white/10 text-xs font-mono text-accent border border-white/10 hover:border-accent/40 transition-colors"
               >
                 <Github className="w-3.5 h-3.5" />
                 <span>Inspect</span>
@@ -248,9 +362,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenContactCar
                 href={DEVELOPER_PROFILE.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-white/5 hover:bg-white/10 text-xs font-mono text-[#00f2ff] border border-white/10 hover:border-[#00f2ff]/40 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-white/5 hover:bg-white/10 text-xs font-mono text-accent border border-white/10 hover:border-accent/40 transition-colors"
               >
-                <Linkedin className="w-3.5 h-3.5 text-[#00dbe7]" />
+                <Linkedin className="w-3.5 h-3.5 text-accent-dim" />
                 <span>Connect</span>
               </a>
             </div>

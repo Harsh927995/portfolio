@@ -1,18 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Terminal as TerminalIcon, Sparkles, CornerDownLeft, Maximize2, Minimize2 } from 'lucide-react';
-import { DEVELOPER_PROFILE, CORE_DEPENDENCIES, PROJECTS } from '../data/portfolioData';
+import { DEVELOPER_PROFILE, CORE_DEPENDENCIES, PROJECTS, CODE_SNIPPETS } from '../data/portfolioData';
+import { THEMES, ThemeId, isValidThemeId } from '../data/themes';
 import { TerminalOutputLine } from '../types';
 
 interface InteractiveTerminalModalProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenResume: () => void;
+  theme: ThemeId;
+  onChangeTheme: (theme: ThemeId) => void;
 }
 
 export const InteractiveTerminalModal: React.FC<InteractiveTerminalModalProps> = ({
   isOpen,
   onClose,
   onOpenResume,
+  theme,
+  onChangeTheme,
 }) => {
   const [inputVal, setInputVal] = useState('');
   const [history, setHistory] = useState<TerminalOutputLine[]>([
@@ -78,7 +83,8 @@ export const InteractiveTerminalModal: React.FC<InteractiveTerminalModalProps> =
   • projects       - List all architectural deployments
   • bio            - Display developer profile & architectural focus
   • ping           - Probe edge node latency & system health
-  • cat <file>     - Print source files (passion.js, architecture.ts)
+  • cat <file>     - Print source files (${Object.keys(CODE_SNIPPETS).join(', ')})
+  • theme [name]   - Inspect or switch color theme (${THEMES.map((t) => t.id).join(', ')})
   • resume         - Open full developer resume document
   • contact        - Print transmission coordinates
   • clear          - Flush terminal buffer
@@ -142,38 +148,52 @@ icmp_seq=3 ttl=118 time=14.1 ms
         ];
         break;
 
-      case 'cat':
+      case 'cat': {
         const file = args[0];
-        if (file === 'passion.js') {
+        const snippet = file ? CODE_SNIPPETS[file] : undefined;
+        if (snippet) {
           responses = [
             {
               id: `res-${Date.now()}-1`,
               type: 'output',
-              text: `const engineer = {
-  focus: 'Scalable Systems',
-  problemSolving: true,
-  approach: () => {
-    /* Analyze requirements, model data, build resilient APIs, craft intuitive interfaces. */
-    return 'High-Impact Products';
-  }
-};`,
+              text: snippet.code,
             },
           ];
-        } else if (file === 'architecture.ts') {
+        } else {
+          const availableFiles = Object.keys(CODE_SNIPPETS)
+            .map((name) => `"cat ${name}"`)
+            .join(', ');
+          responses = [
+            {
+              id: `res-${Date.now()}-1`,
+              type: 'error',
+              text: `cat: ${file || 'null'}: No such file. Try ${availableFiles}.`,
+            },
+          ];
+        }
+        break;
+      }
+
+      case 'theme': {
+        const target = args[0]?.toLowerCase();
+        if (!target) {
           responses = [
             {
               id: `res-${Date.now()}-1`,
               type: 'output',
-              text: `interface SystemConfig {
-  distributed: boolean;
-  zeroDowntimeDeploy: boolean;
-  p99LatencyMs: number;
-}
-export const cloudEngine: SystemConfig = {
-  distributed: true,
-  zeroDowntimeDeploy: true,
-  p99LatencyMs: 14.2
-};`,
+              text: `Active theme: ${theme}\nAvailable themes:\n${THEMES.map(
+                (t) => `  • ${t.id.padEnd(16)} (${t.name}: ${t.primary} / ${t.secondary})`
+              ).join('\n')}\nUsage: theme <id>`,
+            },
+          ];
+        } else if (isValidThemeId(target)) {
+          onChangeTheme(target);
+          const chosen = THEMES.find((t) => t.id === target);
+          responses = [
+            {
+              id: `res-${Date.now()}-1`,
+              type: 'success',
+              text: `Theme switched to "${chosen?.name || target}" (${chosen?.primary} / ${chosen?.secondary}).`,
             },
           ];
         } else {
@@ -181,11 +201,12 @@ export const cloudEngine: SystemConfig = {
             {
               id: `res-${Date.now()}-1`,
               type: 'error',
-              text: `cat: ${file || 'null'}: No such file. Try "cat passion.js" or "cat architecture.ts".`,
+              text: `Unknown theme "${target}". Available: ${THEMES.map((t) => t.id).join(', ')}`,
             },
           ];
         }
         break;
+      }
 
       case 'resume':
         onOpenResume();
@@ -274,34 +295,42 @@ Email transmission sent to ${DEVELOPER_PROFILE.email} with priority flag set to 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Interactive CLI Terminal"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
+    >
       <div
         className={`w-full ${
           isMaximized ? 'max-w-6xl h-[85vh]' : 'max-w-3xl h-[520px]'
-        } surface-glass rounded-xl overflow-hidden flex flex-col border border-[#00f2ff]/40 shadow-[0_0_35px_rgba(0,242,255,0.25)] transition-all duration-300`}
+        } surface-glass rounded-xl overflow-hidden flex flex-col border border-accent/40 shadow-[0_0_35px_rgb(var(--theme-primary-rgb)/0.25)] transition-all duration-300`}
       >
         {/* Terminal Header */}
-        <div className="bg-[#0c0f0f] px-4 py-3 flex items-center justify-between border-b border-white/10 shrink-0">
+        <div className="bg-surface-lowest px-4 py-3 flex items-center justify-between border-b border-white/10 shrink-0">
           <div className="flex items-center gap-2">
             <div className="mac-controls">
               <button
                 onClick={onClose}
+                aria-label="Close terminal"
                 className="mac-close cursor-pointer"
                 title="Close terminal"
               />
               <button
                 onClick={() => setHistory([])}
+                aria-label="Clear terminal screen"
                 className="mac-min cursor-pointer"
                 title="Clear screen"
               />
               <button
                 onClick={() => setIsMaximized(!isMaximized)}
+                aria-label="Toggle fullscreen terminal"
                 className="mac-max cursor-pointer"
                 title="Toggle fullscreen"
               />
             </div>
             <span className="font-mono text-xs text-[#b9cacb] ml-2 flex items-center gap-1.5">
-              <TerminalIcon className="w-3.5 h-3.5 text-[#00f2ff]" />
+              <TerminalIcon className="w-3.5 h-3.5 text-accent" />
               <span>guest@devcore: ~ (bash)</span>
             </span>
           </div>
@@ -309,13 +338,15 @@ Email transmission sent to ${DEVELOPER_PROFILE.email} with priority flag set to 
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsMaximized(!isMaximized)}
-              className="text-[#b9cacb] hover:text-[#00f2ff] p-1"
+              aria-label={isMaximized ? 'Restore terminal size' : 'Maximize terminal'}
+              className="text-[#b9cacb] hover:text-accent p-1 cursor-pointer"
             >
               {isMaximized ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
             </button>
             <button
               onClick={onClose}
-              className="text-[#b9cacb] hover:text-[#e1fdff] p-1"
+              aria-label="Close terminal"
+              className="text-[#b9cacb] hover:text-[#e1fdff] p-1 cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -324,13 +355,13 @@ Email transmission sent to ${DEVELOPER_PROFILE.email} with priority flag set to 
 
         {/* Terminal Output Area */}
         <div
-          className="flex-grow bg-[#0c0f0f] p-4 font-mono text-xs sm:text-sm text-[#b9cacb] overflow-y-auto space-y-2 select-text"
+          className="flex-grow bg-surface-lowest p-4 font-mono text-xs sm:text-sm text-[#b9cacb] overflow-y-auto space-y-2 select-text"
           onClick={() => inputRef.current?.focus()}
         >
           {history.map((line) => {
             if (line.type === 'input') {
               return (
-                <div key={line.id} className="text-[#00f2ff] font-semibold">
+                <div key={line.id} className="text-accent font-semibold">
                   {line.text}
                 </div>
               );
@@ -344,14 +375,14 @@ Email transmission sent to ${DEVELOPER_PROFILE.email} with priority flag set to 
             }
             if (line.type === 'success') {
               return (
-                <div key={line.id} className="text-[#00f2ff] font-bold">
+                <div key={line.id} className="text-accent font-bold">
                   {line.text}
                 </div>
               );
             }
             if (line.type === 'system') {
               return (
-                <div key={line.id} className="text-[#ebb2ff] italic opacity-80">
+                <div key={line.id} className="text-accent-secondary italic opacity-80">
                   {line.text}
                 </div>
               );
@@ -366,8 +397,8 @@ Email transmission sent to ${DEVELOPER_PROFILE.email} with priority flag set to 
         </div>
 
         {/* Terminal Prompt Bar */}
-        <div className="bg-[#121414] px-4 py-3 border-t border-white/10 flex items-center gap-2 shrink-0">
-          <span className="font-mono text-xs text-[#00f2ff] font-bold shrink-0">
+        <div className="bg-surface px-4 py-3 border-t border-white/10 flex items-center gap-2 shrink-0">
+          <span className="font-mono text-xs text-accent font-bold shrink-0">
             guest@devcore:~$
           </span>
           <input
@@ -381,7 +412,8 @@ Email transmission sent to ${DEVELOPER_PROFILE.email} with priority flag set to 
           />
           <button
             onClick={() => handleCommand(inputVal)}
-            className="p-1 rounded text-[#00f2ff] hover:bg-white/5"
+            aria-label="Execute command"
+            className="p-1 rounded text-accent hover:bg-white/5 cursor-pointer"
             title="Execute"
           >
             <CornerDownLeft className="w-3.5 h-3.5" />

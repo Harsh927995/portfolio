@@ -44,7 +44,7 @@ export const ContactCardModal: React.FC<ContactCardModalProps> = ({ isOpen, onCl
             </span>
             <div>
               <h3 className="font-display font-bold text-base text-[#e1fdff]">
-                Harsh Kashyap — Profile & Contact Card
+                Harsh Kashyap | Profile &amp; Contact Card
               </h3>
               <p className="font-mono text-[11px] text-accent">
                 VERIFIED DEVELOPER CARD // +91 {DEVELOPER_PROFILE.phone}
@@ -67,7 +67,7 @@ export const ContactCardModal: React.FC<ContactCardModalProps> = ({ isOpen, onCl
           <div className="relative rounded-xl overflow-hidden border border-white/15 shadow-[0_0_30px_rgba(0,0,0,0.9)] max-h-[65vh] flex items-center justify-center">
             <img
               src="/og-image.png"
-              alt="Harsh Kashyap - Profile & Contact Card"
+              alt="Harsh Kashyap | Profile & Contact Card"
               className="w-full h-auto object-contain rounded-xl max-h-[65vh]"
             />
           </div>

@@ -111,11 +111,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               id="hero-retro-phone-btn"
               onClick={onOpenContactCard}
               className="relative p-1.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-accent/70 transition-all duration-300 cursor-pointer group flex items-center justify-center hover:shadow-[0_0_30px_rgb(var(--theme-primary-rgb)/0.4)] active:scale-90"
-              title="Incoming transmission — Click to view Harsh's Card"
+              title="Incoming transmission: Click to view Harsh's Card"
             >
               <img
                 src="/retro_phone.png"
-                alt="Retro Phone - Click for Contact Card"
+                alt="Retro Phone: Click for Contact Card"
                 className="w-12 h-14 sm:w-14 sm:h-16 object-contain drop-shadow-[0_0_12px_rgb(var(--theme-primary-rgb)/0.35)] group-hover:scale-115 group-hover:rotate-6 group-hover:drop-shadow-[0_0_25px_rgb(var(--theme-primary-rgb)/0.9)] transition-all duration-300"
               />
             </button>

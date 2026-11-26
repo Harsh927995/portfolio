@@ -4,9 +4,10 @@ import { User, Sparkles, MapPin, GraduationCap, Github, ArrowUpRight } from 'luc
 
 interface AboutSectionProps {
   onOpenResume?: () => void;
+  onOpenScrapbook?: () => void;
 }
 
-export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenResume }) => {
+export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenResume, onOpenScrapbook }) => {
   return (
     <section
       id="about"
@@ -55,7 +56,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenResume }) => {
                 Hello! I am <strong className="text-[#e1fdff]">Harsh Kashyap</strong>, a software engineer and frontend developer focused on high-performance React applications, modern build systems, and scalable full-stack architectures.
               </p>
               <p>
-                Beyond writing code, I love designing systems that directly help people. That mindset led me to engineer <strong className="text-accent">Khoje Khatam</strong>—a comprehensive study and Previous Year Question (PYQ) companion built for engineering students across multiple branches.
+                Beyond writing code, I love designing systems that directly help people. That mindset led me to engineer <strong className="text-accent">Khoje Khatam</strong>, a comprehensive study and Previous Year Question (PYQ) companion built for engineering students across multiple branches.
               </p>
             </div>
 
@@ -92,7 +93,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenResume }) => {
                   <div className="w-full h-full rounded-2xl overflow-hidden bg-surface-lowest relative">
                     <img
                       src="/harsh_portrait.jpg"
-                      alt="Harsh Kashyap - Software Engineer"
+                      alt="Harsh Kashyap, Software Engineer"
                       onError={(e) => {
                         const target = e.currentTarget;
                         if (!target.dataset.hasFallback) {
@@ -170,17 +171,29 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenResume }) => {
           </div>
 
           {/* Action Links */}
-          <div className="pt-6 mt-6 border-t border-white/10 flex items-center justify-between gap-3">
+          <div className="pt-6 mt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-2.5">
             <a
               href={DEVELOPER_PROFILE.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 py-2.5 px-4 rounded bg-white/5 hover:bg-white/10 border border-white/10 hover:border-accent/40 text-xs font-mono text-accent flex items-center justify-center gap-2 transition-colors cursor-pointer"
+              className="flex-1 min-w-[135px] py-2.5 px-3.5 rounded bg-white/5 hover:bg-white/10 border border-white/10 hover:border-accent/40 text-xs font-mono text-accent flex items-center justify-center gap-2 transition-colors cursor-pointer"
             >
               <Github className="w-4 h-4" />
-              <span>GitHub Profile</span>
+              <span>GitHub</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
             </a>
+
+            {onOpenScrapbook && (
+              <button
+                id="about-who-is-he-btn"
+                type="button"
+                onClick={onOpenScrapbook}
+                className="py-2.5 px-3.5 rounded bg-accent-secondary/15 hover:bg-accent-secondary/25 border border-accent-secondary/40 text-xs font-display font-bold text-accent-secondary flex items-center gap-1.5 transition-all cursor-pointer"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Who Is He?</span>
+              </button>
+            )}
 
             {onOpenResume && (
               <button

@@ -180,7 +180,7 @@ export const EDUCATION_DATA: EducationItem[] = [
   {
     degree: "B.Tech in Computer Science and Engineering",
     institution: "Chaibasa Engineering College (Jharkhand University of Technology, Ranchi)",
-    duration: "Sep 2023 – Aug 2027",
+    duration: "Sep 2023 to Aug 2027",
     status: "Pursuing",
     desc: "Undergraduate degree focusing on Data Structures, Algorithms, Relational Databases (SQL), Computer Systems, Frontend Engineering, and Artificial Intelligence foundations.",
     tags: ["Data Structures", "Algorithms", "SQL", "React.js", "Python", "Web Systems"],
@@ -189,7 +189,7 @@ export const EDUCATION_DATA: EducationItem[] = [
   {
     degree: "Intermediate in Science (PCM)",
     institution: "Kendriya Vidyalaya, Godda (Central Board of Secondary Education)",
-    duration: "Apr 2020 – May 2022",
+    duration: "Apr 2020 to May 2022",
     status: "Completed",
     desc: "Completed senior secondary school under CBSE specializing in Physics, Chemistry, and Mathematics with a dedicated focus on scientific problem-solving.",
     tags: ["Physics", "Chemistry", "Mathematics", "CBSE"]
@@ -199,7 +199,7 @@ export const EDUCATION_DATA: EducationItem[] = [
 export const PROJECTS: Project[] = [
   {
     id: 'khoje-khatam-web-dev',
-    title: 'Khoje Khatam — B.Tech Academic Resource & Discovery Platform',
+    title: 'Khoje Khatam: B.Tech Academic Resource & Discovery Platform',
     category: 'frontend',
     summary: 'Centralized engineering study companion with searchable Previous Year Questions (PYQs), branch-wise navigation, and structured subject notes.',
     description: 'Architected a modular Single Page Application (SPA) using React and Vite to index and serve branch-specific academic metadata and notes to students across multiple engineering branches.',
@@ -221,7 +221,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'dev-core-portfolio',
-    title: 'DEV_CORE — Interactive Engineering Portfolio',
+    title: 'DEV_CORE: Interactive Engineering Portfolio',
     category: 'frontend',
     summary: 'Next-gen cyber-styled developer portfolio featuring an in-browser interactive IDE code runner, real-time CLI terminal modal, and ATS-compliant CV generator.',
     description: 'Engineered an interactive engineering workspace showcasing telemetry benchmarks, live TypeScript runtime simulator, and custom cyber-glass UI design system.',
@@ -245,7 +245,7 @@ export const PROJECTS: Project[] = [
 
 export const WORK_EXPERIENCE: ExperienceItem[] = [
   {
-    period: "May 2024 – June 2024",
+    period: "May 2024 to June 2024",
     role: "AI & Generative AI Virtual Graduate Intern",
     company: "Infosys Springboard",
     location: "Remote",
@@ -256,7 +256,7 @@ export const WORK_EXPERIENCE: ExperienceItem[] = [
     technologies: ["Generative AI", "NLP", "Python", "Prompt Engineering", "Evaluation Matrices"]
   },
   {
-    period: "2024 – Present",
+    period: "2024 to Present",
     role: "Web Development",
     company: "Self-Learner & Open Source",
     location: "Remote",
@@ -270,7 +270,7 @@ export const WORK_EXPERIENCE: ExperienceItem[] = [
 
 export const CERTIFICATIONS: CertificationItem[] = [
   {
-    title: "Runner-Up – College Level Hack The Web Hackathon",
+    title: "Runner-Up: College Level Hack The Web Hackathon",
     issuer: "Chaibasa Engineering College",
     detail: "Demonstrated rapid frontend prototyping under competitive time limits."
   },
@@ -280,7 +280,7 @@ export const CERTIFICATIONS: CertificationItem[] = [
     detail: "Practical web development internship executing client-side web modules and responsive layouts."
   },
   {
-    title: "Certified – Artificial Intelligence Primer & Principles of Generative AI",
+    title: "Certified: Artificial Intelligence Primer & Principles of Generative AI",
     issuer: "Infosys Springboard",
     detail: "Double Track Credentials covering Generative AI foundations and AI architectures."
   }

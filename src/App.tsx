@@ -28,6 +28,9 @@ const ContactCardModal = lazy(() =>
 const LogoPickerModal = lazy(() =>
   import('./components/LogoPickerModal').then((m) => ({ default: m.LogoPickerModal }))
 );
+const ProfileScrapbookModal = lazy(() =>
+  import('./components/ProfileScrapbookModal').then((m) => ({ default: m.ProfileScrapbookModal }))
+);
 
 export default function App() {
   const [theme, setTheme] = useState<ThemeId>(() => getStoredTheme());
@@ -38,6 +41,7 @@ export default function App() {
   const [isTerminalOpen, setIsTerminalOpen] = useState<boolean>(false);
   const [isContactCardOpen, setIsContactCardOpen] = useState<boolean>(false);
   const [isLogoPickerOpen, setIsLogoPickerOpen] = useState<boolean>(false);
+  const [isScrapbookOpen, setIsScrapbookOpen] = useState<boolean>(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const activeLogo = getLogoById(logoId);
@@ -71,6 +75,7 @@ export default function App() {
         setIsTerminalOpen(false);
         setIsContactCardOpen(false);
         setIsLogoPickerOpen(false);
+        setIsScrapbookOpen(false);
         setSelectedProject(null);
       }
     };
@@ -157,7 +162,10 @@ export default function App() {
         />
 
         {/* 2.5. Personal About Section */}
-        <AboutSection onOpenResume={() => setIsResumeOpen(true)} />
+        <AboutSection
+          onOpenResume={() => setIsResumeOpen(true)}
+          onOpenScrapbook={() => setIsScrapbookOpen(true)}
+        />
 
         {/* 3. Core Engineering Capabilities / Services */}
         <ServicesSection />
@@ -229,6 +237,14 @@ export default function App() {
             onClose={() => setIsLogoPickerOpen(false)}
             selectedLogoId={logoId}
             onSelectLogo={setLogoId}
+          />
+        )}
+
+        {/* Vintage Scrapbook "Who Is He?" Profile Card Modal */}
+        {isScrapbookOpen && (
+          <ProfileScrapbookModal
+            isOpen={isScrapbookOpen}
+            onClose={() => setIsScrapbookOpen(false)}
           />
         )}
       </Suspense>

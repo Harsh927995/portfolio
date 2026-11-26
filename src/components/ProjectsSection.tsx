@@ -263,7 +263,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
             Featured Engineering Deployments
           </h2>
           <p className="font-sans text-sm sm:text-base text-[#b9cacb] max-w-2xl">
-            Explore each project inside an interactive live-preview deck. Switch cards or toggle Blueprint view—click the preview window or Visit Project to open on GitHub.
+            Explore each project inside an interactive live-preview deck. Switch cards or toggle Blueprint view, and click the preview window or Visit Project to open on GitHub.
           </p>
         </div>
 
@@ -332,7 +332,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
             <div className="flex flex-wrap items-center gap-2">
               {filteredProjects.map((proj, idx) => {
                 const isSelected = idx === activeIndex;
-                const shortLabel = proj.title.split('—')[0].trim();
+                const shortLabel = proj.title.split(':')[0].trim();
                 return (
                   <button
                     key={proj.id}

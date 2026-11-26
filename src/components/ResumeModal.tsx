@@ -37,7 +37,7 @@ ${project.architecture.map((bullet) => `- ${bullet}`).join('\n')}
 
 ## EXPERIENCE
 ${WORK_EXPERIENCE.map(
-  (exp) => `### ${exp.role} – ${exp.company}
+  (exp) => `### ${exp.role} | ${exp.company}
 ${exp.location} | ${exp.period}
 ${exp.highlights.map((h) => `- ${h}`).join('\n')}
 `
@@ -64,7 +64,7 @@ ${CERTIFICATIONS.map((cert) => `- ${cert.title} (${cert.issuer}): ${cert.detail}
       id="resume-modal-root"
       role="dialog"
       aria-modal="true"
-      aria-label="Curriculum Vitae — Harsh Kashyap"
+      aria-label="Curriculum Vitae: Harsh Kashyap"
       className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md overflow-y-auto"
     >
       <div id="resume-modal-card" className="w-full max-w-4xl max-h-[92vh] bg-surface border border-white/15 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.95)] flex flex-col my-auto overflow-hidden">
